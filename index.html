@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>全家便利商店霜淇淋地圖 | 尋找單口味與雙口味店舖</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="快速查詢雙北全家便利商店霜淇淋販售地點。地圖顯示單口味與雙口味（圓滾滾）霜淇淋店舖資訊，幫您輕鬆找到最近的美味霜淇淋。">
+    <meta name="keywords" content="全家霜淇淋, 全家便利商店, 霜淇淋地圖, 雙口味霜淇淋, 單口味霜淇淋, 圓滾滾霜淇淋, Fami!ce, FamilyMart">
+    <meta property="og:title" content="全家便利商店霜淇淋地圖 | 尋找單口味與雙口味店舖">
+    <meta property="og:description" content="快速查詢全台全家便利商店霜淇淋販售地點。地圖顯示單口味與雙口味（圓滾滾）霜淇淋店舖資訊，幫您輕鬆找到最近的美味霜淇淋。">
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { width: 100%; height: 100vh; }
+        .store-popup { font-size: 14px; }
+        .store-popup b { font-size: 16px; color: #333; }
+        .legend {
+            padding: 6px 8px;
+            font: 14px Arial, Helvetica, sans-serif;
+            background: white;
+            background: rgba(255,255,255,0.8);
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            line-height: 24px;
+            color: #555;
+        }
+        .legend i {
+            width: 18px;
+            height: 18px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        // Initialize map
+        var map = L.map('map');
+        
+        // Add CartoDB Voyager tiles (Cleaner, Modern look)
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(map);
+
+        // Define colored icons
+        var redIcon = new L.Icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        var blueIcon = new L.Icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        // Add Legend
+        var legend = L.control({position: 'bottomright'});
+        legend.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'legend');
+            div.innerHTML += '<i style="background: red; border-radius: 50%; width: 10px; height: 10px; margin-top: 7px;"></i> 雙口味 (Red)<br>';
+            div.innerHTML += '<i style="background: blue; border-radius: 50%; width: 10px; height: 10px; margin-top: 7px;"></i> 單口味 (Blue)';
+            return div;
+        };
+        legend.addTo(map);
+
+        // Fetch store data from external JSON file
+        fetch('stores.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(stores => {
+                var bounds = [];
+                
+                stores.forEach(function(store) {
+                    var name = store.NAME || 'Unknown Store';
+                    var lat = store.py; // Latitude
+                    var lon = store.px; // Longitude
+                    var addr = store.addr || '';
+                    var tel = store.TEL || '';
+                    var road = store.road || '';
+                    var type = store.flavorType || '';
+                    
+                    // Choose icon based on assigned color
+                    var icon = (store.markerColor === 'red') ? redIcon : blueIcon;
+
+                    if (lat && lon) {
+                        var popupContent = '<div class="store-popup">' +
+                            '<b>' + name + '</b><br>' +
+                            '<span style="color:' + store.markerColor + '; font-weight:bold;">' + type + '</span><br>' +
+                            '地址: ' + addr + '<br>' +
+                            '電話: ' + tel + '<br>' +
+                            '路段: ' + road +
+                            '</div>';
+
+                        L.marker([lat, lon], {icon: icon}).addTo(map)
+                            .bindPopup(popupContent);
+                        
+                        bounds.push([lat, lon]);
+                    }
+                });
+
+                // Fit map to show all markers
+                if (bounds.length > 0) {
+                    map.fitBounds(bounds, { padding: [50, 50] });
+                } else {
+                    // Default center if no markers
+                    map.setView([25.0330, 121.5654], 13);
+                }
+            })
+            .catch(error => {
+                console.error('Error loading store data:', error);
+                // Fallback center
+                map.setView([25.0330, 121.5654], 13);
+            });
+    </script>
+</body>
+</html>
