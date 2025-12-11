@@ -150,7 +150,7 @@ class MapController {
 
             container.onclick = (e) => {
                 e.preventDefault();
-                this.locateUser();
+                this.locateUser(true);
             };
 
             return container;
@@ -162,21 +162,23 @@ class MapController {
     /**
      * Requests user location and centers map if granted
      * Also starts watching position for updates
+     * @param {boolean} isManualRequest - Whether this request was triggered by user action
      */
-    locateUser() {
+    locateUser(isManualRequest = false) {
         if (!navigator.geolocation) {
-            console.log('Geolocation is not supported by your browser');
+            alert('您的瀏覽器不支援地理位置功能');
             return;
         }
 
         // Clear existing watch if any
         if (this.watchId !== null) {
             navigator.geolocation.clearWatch(this.watchId);
+            this.watchId = null;
         }
 
         const options = {
             enableHighAccuracy: true,
-            timeout: 5000,
+            timeout: 10000,
             maximumAge: 0
         };
 
@@ -189,20 +191,30 @@ class MapController {
                     [position.coords.latitude, position.coords.longitude],
                     15
                 );
+                
+                // Start watching position only after successful permission/location
+                this.watchId = navigator.geolocation.watchPosition(
+                    (pos) => this._updateUserMarker(pos),
+                    (err) => console.log('Error watching position:', err.message),
+                    options
+                );
             },
             (error) => {
                 console.log('Location access denied or failed:', error.message);
-            },
-            options
-        );
-
-        // Start watching position
-        this.watchId = navigator.geolocation.watchPosition(
-            (position) => {
-                this._updateUserMarker(position);
-            },
-            (error) => {
-                console.log('Error watching position:', error.message);
+                
+                if (isManualRequest) {
+                    let errorMessage = '無法取得您的位置。';
+                    
+                    if (error.code === 1) { // PERMISSION_DENIED
+                        errorMessage = '請允許存取位置資訊以顯示您附近的店舖。\n若您先前已拒絕，請檢查瀏覽器網址列或設定中的權限設定。';
+                    } else if (error.code === 2) { // POSITION_UNAVAILABLE
+                        errorMessage = '無法偵測到您的目前位置，請確認您的裝置已開啟 GPS 或連上網路。';
+                    } else if (error.code === 3) { // TIMEOUT
+                        errorMessage = '取得位置資訊逾時，請稍後再試。';
+                    }
+                    
+                    alert(errorMessage);
+                }
             },
             options
         );
