@@ -1,3 +1,4 @@
 build_up/
 .venv/
 local.py
+.cursor/

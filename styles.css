@@ -1,3 +1,25 @@
+:root {
+    /* Colors */
+    --primary-blue: #2b82cb;
+    --primary-red: #e04e39;
+    --text-primary: #333;
+    --text-secondary: #555;
+    --text-muted: #666;
+    --bg-white: #fff;
+    --bg-white-transparent: rgba(255, 255, 255, 0.8);
+    --border-light: rgba(0, 0, 0, 0.1);
+    --shadow-light: rgba(0, 0, 0, 0.2);
+    --shadow-medium: rgba(0, 0, 0, 0.5);
+    --stripe-color: rgba(255, 246, 125, 0.3);
+    --link-color: #443dff;
+    
+    /* Layout */
+    --pin-size: 30px;
+    --legend-icon-size: 18px;
+    --font-family: 'Noto Sans TC', Arial, Helvetica, sans-serif;
+    --border-radius: 5px;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -8,32 +30,51 @@ body {
     height: 100vh;
 }
 
+/* --- Popups --- */
 .store-popup {
     font-size: 14px;
+    font-family: var(--font-family);
 }
 
 .store-popup b {
     font-size: 16px;
-    color: #333;
+    color: var(--text-primary);
 }
 
+.store-popup-link {
+    text-decoration: none;
+    color: var(--link-color) !important;
+    border-bottom: 1px solid var(--link-color);
+}
+
+.store-popup-flavor {
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.store-popup-flavor--multiline {
+    white-space: normal;
+}
+
+/* --- Legend --- */
 .legend {
     padding: 6px 8px;
-    font: 14px Arial, Helvetica, sans-serif;
-    background: white;
-    background: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
+    font: 14px var(--font-family);
+    background: var(--bg-white-transparent);
+    box-shadow: 0 0 15px var(--shadow-light);
+    border-radius: var(--border-radius);
     line-height: 24px;
-    color: #555;
+    color: var(--text-secondary);
 }
 
 .legend i {
-    width: 18px;
-    height: 18px;
+    width: var(--legend-icon-size);
+    height: var(--legend-icon-size);
     float: left;
     margin-right: 8px;
-    opacity: 0.7;
+    opacity: 0.9;
+    border-radius: 50%;
+    border: 1px solid var(--border-light);
 }
 
 .legend-item {
@@ -50,10 +91,72 @@ body {
     margin-right: 5px;
 }
 
-/* Positioning Control Styles */
+.last-updated {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+    border-top: 1px solid #ddd;
+    padding-top: 4px;
+}
+
+/* --- Map Pin Shapes --- */
+.custom-pin {
+    width: var(--pin-size);
+    height: var(--pin-size);
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(135deg);
+    border: 2px solid var(--bg-white);
+    box-shadow: -1px 1px 5px var(--shadow-medium);
+    box-sizing: border-box; 
+}
+
+/* Color Variants */
+.marker-blue {
+    background-color: var(--primary-blue);
+}
+
+.marker-red {
+    background-color: var(--primary-red);
+}
+
+/* Striped Variants */
+.marker-striped {
+    background-image: repeating-linear-gradient(
+        45deg,
+        var(--stripe-color) 0px,
+        var(--stripe-color) 5px,
+        transparent 5px,
+        transparent 10px
+    );
+}
+
+.marker-blue-striped {
+    background-color: var(--primary-blue);
+}
+
+.marker-red-striped {
+    background-color: var(--primary-red);
+}
+
+/* Combine striped classes effectively in HTML if possible, 
+   but keeping specific classes for Leaflet divIcon compatibility 
+   and easier composition in JS */
+.marker-blue-striped,
+.marker-red-striped {
+    background-image: repeating-linear-gradient(
+        45deg,
+        var(--stripe-color) 0px,
+        var(--stripe-color) 5px,
+        transparent 5px,
+        transparent 10px
+    );
+}
+
+
+/* --- Controls --- */
 .leaflet-control-locate {
-    background-color: #fff;
-    border: 2px solid rgba(0,0,0,0.2);
+    background-color: var(--bg-white);
+    border: 2px solid var(--shadow-light);
     background-clip: padding-box;
     border-radius: 4px;
     cursor: pointer;
@@ -77,7 +180,7 @@ body {
     background-position: center;
 }
 
-/* User Location Marker Styles */
+/* --- User Location --- */
 .user-location-marker {
     background: transparent;
     border: none;
@@ -88,7 +191,7 @@ body {
     height: 20px;
     border-radius: 50%;
     background: #4285F4;
-    border: 3px solid #fff;
+    border: 3px solid var(--bg-white);
     box-shadow: 0 0 5px rgba(0,0,0,0.3);
     position: relative;
     box-sizing: border-box;
