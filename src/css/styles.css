@@ -27,9 +27,9 @@
     --cluster-red-inner: rgba(241, 63, 131, 0.9);
 }
 
+/* Dark Mode - DISABLED
 @media (prefers-color-scheme: dark) {
     :root {
-        /* Colors - Dark Mode */
         --text-primary: #eee;
         --text-secondary: #ccc;
         --text-muted: #aaa;
@@ -43,6 +43,7 @@
         --stripe-color: rgba(255, 255, 255, 0.2);
     }
 }
+*/
 
 body {
     margin: 0;
@@ -59,23 +60,20 @@ body {
     background-color: #e5e5e5; /* Fallback for map loading */
 }
 
-/* Dark mode map filter */
+/* Dark mode map filter - DISABLED
 @media (prefers-color-scheme: dark) {
     .leaflet-tile-pane {
         filter: invert(1) hue-rotate(180deg) brightness(0.95) contrast(0.9);
     }
-    /* Invert back markers and controls so they look normal */
+    
     .leaflet-marker-pane,
     .leaflet-overlay-pane,
     .leaflet-popup-pane,
     .leaflet-control-container {
-        /* Usually we don't invert these, but since the whole map container isn't inverted, just the tiles, this is fine. 
-           If we inverted the whole map div, we would need to un-invert these.
-           Wait, leaflet-tile-pane is just the tiles. So markers are on top and not inverted.
-           However, CartoDB tiles are light. Inverting them makes them dark.
-        */
+        
     }
 }
+*/
 
 /* Fix for mobile browser safe areas to prevent cropping */
 .leaflet-bottom .leaflet-control,
@@ -119,11 +117,12 @@ body {
     white-space: normal;
 }
 
-/* Leaflet Popup Styling Override for Dark Mode */
+/* Leaflet Popup Styling Override for Dark Mode - DISABLED
 .leaflet-popup-content-wrapper, .leaflet-popup-tip {
     background: var(--bg-white);
     color: var(--text-primary);
 }
+*/
 
 /* --- Legend --- */
 .legend {
