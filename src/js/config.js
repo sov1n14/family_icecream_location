@@ -4,7 +4,7 @@
  */
 export const CONFIG = {
     MAP_ID: 'map',
-    DATA_URL: '/stores.json', // Served from root/public
+    DATA_URL: '../../stores.json', // Relative path from worker location (src/worker/) to root
     DEFAULT_CENTER: [25.0320, 121.5143], // Taipei
     DEFAULT_ZOOM: 13,
     TILE_LAYER: {
