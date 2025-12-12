@@ -22,7 +22,7 @@ export class LocationService {
      * @param {Object} options - Geolocation options
      * @returns {Promise<GeolocationPosition>}
      */
-    getCurrentPosition(options = { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }) {
+    getCurrentPosition(options = { enableHighAccuracy: true, timeout: 30000, maximumAge: 30000 }) {
         return new Promise((resolve, reject) => {
             if (!this.isSupported) {
                 reject(new Error('GEOLOCATION_NOT_SUPPORTED'));
