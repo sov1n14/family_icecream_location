@@ -27,7 +27,12 @@ body {
 
 #map {
     width: 100%;
+    /*
+     * 行動瀏覽器上，100vh 可能會把底部工具列算進高度，導致右下角控制項被遮擋/裁切。
+     * 使用 100dvh 以符合「目前可視 viewport」高度；不支援時會回退到上一行 100vh。
+     */
     height: 100vh;
+    height: 100dvh;
 }
 
 /* --- Popups --- */
@@ -207,6 +212,16 @@ body {
     top: 0;
     left: 0;
     animation: pulse-animation 2s infinite;
+}
+
+/* --- 行動裝置安全區（iOS 圓角/瀏海）--- */
+.leaflet-bottom.leaflet-right {
+    /* 舊版 iOS Safari */
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-right: constant(safe-area-inset-right);
+    /* 現行標準 */
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-right: env(safe-area-inset-right);
 }
 
 @keyframes pulse-animation {
