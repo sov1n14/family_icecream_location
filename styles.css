@@ -1,7 +1,7 @@
 :root {
     /* Colors */
-    --primary-blue: #2b82cb;
-    --primary-red: #e04e39;
+    --primary-blue: #36c5f0;
+    --primary-red: #f13f83;
     --text-primary: #333;
     --text-secondary: #555;
     --text-muted: #666;
@@ -10,7 +10,7 @@
     --border-light: rgba(0, 0, 0, 0.1);
     --shadow-light: rgba(0, 0, 0, 0.2);
     --shadow-medium: rgba(0, 0, 0, 0.5);
-    --stripe-color: rgba(255, 246, 125, 0.3);
+    --stripe-color: rgba(235, 235, 235, 0.4);
     --link-color: #443dff;
     
     /* Layout */
@@ -33,6 +33,12 @@ body {
 
 /* Fix for mobile browser safe areas to prevent cropping */
 .leaflet-bottom .leaflet-control {
+    margin-bottom: max(10px, env(safe-area-inset-bottom));
+}
+
+/* Align Leaflet attribution (slogan) with other controls */
+.leaflet-container .leaflet-control-attribution {
+    margin-right: 10px;
     margin-bottom: max(10px, env(safe-area-inset-bottom));
 }
 
@@ -106,14 +112,31 @@ body {
 }
 
 /* --- Map Pin Shapes --- */
+/* Wrapper for the custom pin to isolate transform context */
+.pin-wrapper {
+    background: transparent;
+    border: none;
+}
+
 .custom-pin {
     width: var(--pin-size);
     height: var(--pin-size);
     border-radius: 50% 50% 50% 0;
-    transform: rotate(135deg);
+    transform: rotate(-45deg);
     border: 2px solid var(--bg-white);
     box-shadow: -1px 1px 5px var(--shadow-medium);
     box-sizing: border-box; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-pin::after {
+    content: '';
+    width: 12px;
+    height: 12px;
+    background-color: var(--bg-white);
+    border-radius: 50%;
 }
 
 /* Color Variants */
@@ -125,15 +148,23 @@ body {
     background-color: var(--primary-red);
 }
 
-/* Striped Variants */
+/* Striped Variants (Grid Pattern) */
 .marker-striped {
-    background-image: repeating-linear-gradient(
-        45deg,
-        var(--stripe-color) 0px,
-        var(--stripe-color) 5px,
-        transparent 5px,
-        transparent 10px
-    );
+    background-image: 
+        repeating-linear-gradient(
+            45deg,
+            var(--stripe-color) 0px,
+            var(--stripe-color) 2px,
+            transparent 2px,
+            transparent 6px
+        ),
+        repeating-linear-gradient(
+            -45deg,
+            var(--stripe-color) 0px,
+            var(--stripe-color) 2px,
+            transparent 2px,
+            transparent 6px
+        );
 }
 
 .marker-blue-striped {
@@ -149,19 +180,27 @@ body {
    and easier composition in JS */
 .marker-blue-striped,
 .marker-red-striped {
-    background-image: repeating-linear-gradient(
-        45deg,
-        var(--stripe-color) 0px,
-        var(--stripe-color) 5px,
-        transparent 5px,
-        transparent 10px
-    );
+    background-image: 
+        repeating-linear-gradient(
+            0deg,
+            var(--stripe-color) 0px,
+            var(--stripe-color) 2px,
+            transparent 2px,
+            transparent 6px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            var(--stripe-color) 0px,
+            var(--stripe-color) 2px,
+            transparent 2px,
+            transparent 6px
+        );
 }
 
 
 /* --- Controls --- */
 .leaflet-control-locate {
-    background-color: var(--bg-white);
+    background-color: rgba(255, 255, 255, 0.8);
     border: 2px solid var(--shadow-light);
     background-clip: padding-box;
     border-radius: 4px;
@@ -184,6 +223,27 @@ body {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23333' d='M256 0c141.4 0 256 114.6 256 256S397.4 512 256 512 0 397.4 0 256 114.6 0 256 0zm0 48C141.1 48 48 141.1 48 256s93.1 208 208 208 208-93.1 208-208S370.9 48 256 48zm0 96c61.9 0 112 50.1 112 112s-50.1 112-112 112-112-50.1-112-112 50.1-112 112-112zm0 48c-35.3 0-64 28.7-64 64s28.7 64 64 64 64-28.7 64-64-28.7-64-64-64z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: center;
+}
+
+/* Loading State for Locate Control */
+.leaflet-control-locate.loading {
+    cursor: wait;
+    pointer-events: none;
+}
+
+.leaflet-control-locate.loading .leaflet-control-locate-icon {
+    background-image: none; /* Hide the icon */
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid var(--text-secondary);
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* --- User Location --- */
