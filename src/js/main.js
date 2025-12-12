@@ -1,4 +1,4 @@
-import '../css/styles.css';
+// CSS imported in index.html for static deployment compatibility
 import { CONFIG } from './config.js';
 import { ServiceWorkerService } from './services/ServiceWorkerService.js';
 import { StoreService } from './services/StoreService.js';

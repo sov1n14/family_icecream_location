@@ -1,5 +1,4 @@
 import { CONFIG } from '../config.js';
-import StoreWorker from '../../worker/store.worker.js?worker';
 
 /**
  * Service to handle data fetching and normalization
@@ -12,8 +11,9 @@ export class StoreService {
      */
     static fetchStores() {
         return new Promise((resolve, reject) => {
-            // Use Vite's worker import syntax
-            const worker = new StoreWorker();
+            // Use standard Worker constructor for static deployment compatibility
+            // This works in browsers supporting ES modules and standardizes the path resolution
+            const worker = new Worker(new URL('../../worker/store.worker.js', import.meta.url));
 
             worker.onmessage = function(e) {
                 if (e.data.type === 'SUCCESS') {
