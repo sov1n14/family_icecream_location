@@ -28,6 +28,12 @@ body {
 #map {
     width: 100%;
     height: 100vh;
+    height: 100dvh; /* Adapt to dynamic mobile browser viewports */
+}
+
+/* Fix for mobile browser safe areas to prevent cropping */
+.leaflet-bottom .leaflet-control {
+    margin-bottom: max(10px, env(safe-area-inset-bottom));
 }
 
 /* --- Popups --- */
