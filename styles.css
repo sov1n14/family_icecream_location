@@ -112,12 +112,6 @@ body {
 }
 
 /* --- Map Pin Shapes --- */
-/* Wrapper for the custom pin to isolate transform context */
-.pin-wrapper {
-    background: transparent;
-    border: none;
-}
-
 .custom-pin {
     width: var(--pin-size);
     height: var(--pin-size);
@@ -182,14 +176,14 @@ body {
 .marker-red-striped {
     background-image: 
         repeating-linear-gradient(
-            0deg,
+            45deg,
             var(--stripe-color) 0px,
             var(--stripe-color) 2px,
             transparent 2px,
             transparent 6px
         ),
         repeating-linear-gradient(
-            90deg,
+            -45deg,
             var(--stripe-color) 0px,
             var(--stripe-color) 2px,
             transparent 2px,
@@ -288,4 +282,122 @@ body {
         transform: scale(1);
         opacity: 0;
     }
+}
+
+/* --- Loading Overlay --- */
+#loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+#loading-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--primary-blue);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* --- Toast Notifications --- */
+#toast-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 90%;
+    max-width: 400px;
+    pointer-events: none;
+}
+
+.toast {
+    background-color: #333;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 4px;
+    font-family: var(--font-family);
+    font-size: 14px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    pointer-events: auto;
+    text-align: center;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast.error {
+    background-color: #e53935;
+}
+
+/* --- Marker Cluster Customization --- */
+.marker-cluster {
+    background-clip: padding-box;
+    border-radius: 20px;
+}
+
+.marker-cluster div {
+    width: 30px;
+    height: 30px;
+    margin-left: 5px;
+    margin-top: 5px;
+    text-align: center;
+    border-radius: 15px;
+    font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Default Blue Cluster (Majority Single) */
+.marker-cluster-blue {
+    background-color: rgba(54, 197, 240, 0.4);
+}
+
+.marker-cluster-blue div {
+    background-color: rgba(54, 197, 240, 0.9);
+}
+
+/* Red Cluster (Majority Dual) */
+.marker-cluster-red {
+    background-color: rgba(241, 63, 131, 0.4);
+}
+
+.marker-cluster-red div {
+    background-color: rgba(241, 63, 131, 0.9);
+}
+
+/* Split Cluster (Equal Quantities) */
+.marker-cluster-split {
+    background: linear-gradient(to right, rgba(241, 63, 131, 0.4) 50%, rgba(54, 197, 240, 0.4) 50%);
+}
+
+.marker-cluster-split div {
+    background: linear-gradient(to right, rgba(241, 63, 131, 0.9) 50%, rgba(54, 197, 240, 0.9) 50%);
 }
