@@ -176,14 +176,14 @@ body {
 .marker-red-striped {
     background-image: 
         repeating-linear-gradient(
-            45deg,
+            0deg,
             var(--stripe-color) 0px,
             var(--stripe-color) 2px,
             transparent 2px,
             transparent 6px
         ),
         repeating-linear-gradient(
-            -45deg,
+            90deg,
             var(--stripe-color) 0px,
             var(--stripe-color) 2px,
             transparent 2px,
