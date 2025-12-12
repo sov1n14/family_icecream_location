@@ -2,3 +2,5 @@ build_up/
 .venv/
 local.py
 .cursor/
+node_modules/
+dist/

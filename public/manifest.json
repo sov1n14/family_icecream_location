@@ -1,0 +1,21 @@
+{
+    "name": "全家霜淇淋地圖",
+    "short_name": "全家霜淇淋地圖",
+    "description": "快速查詢全台全家便利商店霜淇淋販售地點與口味。",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#36c5f0",
+    "icons": [
+        {
+            "src": "icon/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icon/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

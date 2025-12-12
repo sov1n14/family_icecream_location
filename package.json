@@ -1,0 +1,25 @@
+{
+  "name": "family_icecream_location",
+  "version": "1.0.0",
+  "description": "這是一個簡單的網頁應用程式，用來尋找全台灣販售霜淇淋的全家便利商店 (FamilyMart)。地圖會特別區分販售「單口味」與「雙口味」（包含圓滾滾造型）的店舖，讓您輕鬆找到心儀的口味。",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/U53rN4M3-0CV4/family_icecream_location.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/U53rN4M3-0CV4/family_icecream_location/issues"
+  },
+  "homepage": "https://github.com/U53rN4M3-0CV4/family_icecream_location#readme",
+  "devDependencies": {
+    "vite": "^6.4.1"
+  }
+}
