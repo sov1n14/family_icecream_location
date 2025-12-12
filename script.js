@@ -184,6 +184,7 @@ class MapController {
         this.icons = {};
         this.userMarker = null;
         this.watchId = null;
+        this.locateButton = null;
     }
 
     /**
@@ -214,7 +215,8 @@ class MapController {
         };
 
         const createIcon = (className) => L.divIcon({
-            className: `custom-pin ${className}`,
+            className: 'pin-wrapper',
+            html: `<div class="custom-pin ${className}"></div>`,
             ...pinDefaults
         });
 
@@ -249,9 +251,14 @@ class MapController {
             // Create inner icon element
             L.DomUtil.create('div', 'leaflet-control-locate-icon', container);
             
+            this.locateButton = container;
+
             L.DomEvent.disableClickPropagation(container);
             container.onclick = (e) => {
                 e.preventDefault();
+                if (this.locateButton && this.locateButton.classList.contains('loading')) {
+                    return;
+                }
                 this.locateUser(true);
             };
             return container;
@@ -298,6 +305,10 @@ class MapController {
             return;
         }
 
+        if (this.locateButton) {
+            this.locateButton.classList.add('loading');
+        }
+
         if (this.watchId !== null) {
             navigator.geolocation.clearWatch(this.watchId);
             this.watchId = null;
@@ -317,6 +328,10 @@ class MapController {
     }
 
     _handleLocationSuccess(position) {
+        if (this.locateButton) {
+            this.locateButton.classList.remove('loading');
+        }
+
         const { latitude, longitude } = position.coords;
         
         this._updateUserMarker(latitude, longitude);
@@ -331,6 +346,10 @@ class MapController {
     }
 
     _handleLocationError(error, isManualRequest) {
+        if (this.locateButton) {
+            this.locateButton.classList.remove('loading');
+        }
+
         console.warn('Location access denied or failed:', error.message);
         
         if (!isManualRequest) return;
