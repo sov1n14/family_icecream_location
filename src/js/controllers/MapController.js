@@ -208,8 +208,6 @@ export class MapController {
 
         console.warn('Location access denied or failed:', error.message);
         
-        if (!isManualRequest) return;
-
         // Throttle error messages
         const now = Date.now();
         if (now - this.lastErrorTime < 5000) {
