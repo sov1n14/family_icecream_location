@@ -4,7 +4,7 @@
  */
 export const CONFIG = {
     MAP_ID: 'map',
-    DATA_URL: '../../stores.json', // Relative path from worker location (src/worker/) to root
+    DATA_URL: import.meta.env.BASE_URL + 'stores.json', // Absolute path handling GitHub Pages subpath
     DEFAULT_CENTER: [25.0320, 121.5143], // Taipei
     DEFAULT_ZOOM: 13,
     TILE_LAYER: {

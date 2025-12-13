@@ -1,4 +1,4 @@
-const CACHE_NAME = 'family-icecream-map-v4';
+const CACHE_NAME = 'family-icecream-map-v5';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -6,16 +6,8 @@ const ASSETS_TO_CACHE = [
     './stores.json',
     './icon/icon-192x192.png',
     './icon/icon-512x512.png',
-    './src/css/styles.css',
-    './src/js/main.js',
-    './src/js/config.js',
-    './src/js/controllers/LoadingController.js',
-    './src/js/controllers/MapController.js',
-    './src/js/helpers/UIHelpers.js',
-    './src/js/services/LocationService.js',
-    './src/js/services/NotificationService.js',
-    './src/js/services/ServiceWorkerService.js',
-    './src/js/services/StoreService.js',
+    // Source files are bundled by Vite and not available in dist/src/...
+    // We rely on runtime caching for the hashed JS/CSS bundles
     'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css',
     'https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css',
     'https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css',
