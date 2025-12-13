@@ -4,7 +4,10 @@
 export class ServiceWorkerService {
     static register() {
         // Disable Service Worker in development to avoid caching issues
-        if (import.meta.env.DEV) {
+        // Safe check for import.meta.env to support non-Vite environments
+        const isDev = import.meta.env && import.meta.env.DEV;
+        
+        if (isDev) {
             console.log('Service Worker disabled in development');
             // Unregister any existing service workers
             if ('serviceWorker' in navigator) {

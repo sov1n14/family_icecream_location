@@ -2,9 +2,19 @@
  * Application Constants and Configuration
  * Centralizes all static configuration to avoid magic values
  */
+// Safe detection of BASE_URL for both Vite and raw source
+const getBaseUrl = () => {
+    if (import.meta.env && import.meta.env.BASE_URL) {
+        return import.meta.env.BASE_URL;
+    }
+    // Fallback for raw hosting (e.g. GitHub Pages source deployment)
+    const path = (typeof window !== 'undefined' ? window.location.pathname : self.location.pathname);
+    return path.includes('/family_icecream_location/') ? '/family_icecream_location/' : '/';
+};
+
 export const CONFIG = {
     MAP_ID: 'map',
-    DATA_URL: import.meta.env.BASE_URL + 'stores.json', // Absolute path handling GitHub Pages subpath
+    DATA_URL: getBaseUrl() + 'stores.json', // Absolute path handling GitHub Pages subpath
     DEFAULT_CENTER: [25.0320, 121.5143], // Taipei
     DEFAULT_ZOOM: 13,
     TILE_LAYER: {
