@@ -20,34 +20,53 @@ class App {
     }
 
     async init() {
-        // Register Service Worker
-        ServiceWorkerService.register();
-
-        // Initialize Offline Listener
-        this._initOfflineListener();
-
-        // Initialize Map
-        this.mapController.init();
-        
-        // Auto-locate on load
-        this.mapController.locateUser();
-
-        this.loadingController.show();
-
         try {
+            // Register Service Worker
+            ServiceWorkerService.register();
+
+            // Initialize Offline Listener
+            this._initOfflineListener();
+
+            // Check if Leaflet is loaded (CDN might fail if offline)
+            if (typeof L === 'undefined') {
+                throw new Error('地圖元件 (Leaflet) 未載入，請檢查網路連線');
+            }
+
+            // Check if MarkerCluster is loaded
+            if (typeof L.markerClusterGroup === 'undefined') {
+                throw new Error('地圖叢集元件 (MarkerCluster) 未載入，請檢查網路連線');
+            }
+
+            // Initialize Map
+            this.mapController.init();
+            
+            // Auto-locate on load
+            this.mapController.locateUser();
+
+            // Show loading initially (though it's visible by default)
+            this.loadingController.show();
+
             const { stores, lastUpdated } = await StoreService.fetchStores();
             this.mapController.renderMarkers(stores);
             this.mapController.updateLastUpdatedTime(lastUpdated);
+
         } catch (error) {
-            console.error('Failed to initialize application:', error);
-            // Check if we are offline
+            console.error('Application initialization failed:', error);
+            
+            this.loadingController.hide(); // Hide loading to show error toast
+            
+            // Check specific error types or network status
             if (!navigator.onLine) {
-                 this.notificationService.show('目前處於離線模式，無法更新資料', 'error');
+                 this.notificationService.show('目前處於離線模式，無法載入地圖或更新資料', 'error');
             } else {
-                 this.notificationService.show(CONFIG.MESSAGES.FETCH_ERROR, 'error');
+                 this.notificationService.show(error.message || CONFIG.MESSAGES.FETCH_ERROR, 'error');
             }
         } finally {
-            this.loadingController.hide();
+            // Ensure loading is hidden if we succeeded or if we handled the error
+            // (Note: we already hid it in catch, but this ensures it for success path)
+            if (!this.loadingController.element.classList.contains(CONFIG.UI.CSS_CLASSES.LOADING_HIDDEN)) {
+                this.loadingController.hide();
+            }
         }
     }
 
