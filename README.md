@@ -45,9 +45,11 @@
     *   `manifest.json`：PWA 設定檔
     *   `service-worker.js`：Service Worker 腳本
     *   `icon/`：應用程式圖示
+*   `build_up/generate_store_map.py`：抓取全家官方資料並產生 `public/stores.json` 的腳本
 *   `index.html`：網頁入口檔案
 *   `vite.config.js`：Vite 設定檔
 *   `.github/workflows/deploy.yml`：GitHub Actions 自動建置與部署設定
+*   `.github/workflows/update-data.yml`：GitHub Actions 排程自動更新店舖資料設定
 
 ## 如何安裝與執行 (Installation & Usage)
 
@@ -82,6 +84,15 @@
 *   每次推送至 `main` 分支時，會自動執行 `npm ci` 與 `npm run build`，並將建置產物 `dist/` 部署到 GitHub Pages。
 *   GitHub Pages 的來源設定需為「GitHub Actions」（而非直接發布分支原始檔案），才能正確套用 Vite 的建置結果（含資源雜湊、路徑改寫等）。
 *   `public/` 目錄下的檔案（`stores.json`、`manifest.json`、`service-worker.js`、`icon/`）會在建置時原封不動複製到 `dist/` 根目錄，因此新增靜態資源請放在 `public/`，而非專案根目錄。
+
+### 資料自動更新 (Scheduled Data Update)
+
+`public/stores.json` 不再需要人工手動執行腳本更新，透過 `.github/workflows/update-data.yml` 排程自動維護：
+
+*   每天 UTC 04:00（台北時間 12:00）自動執行 `build_up/generate_store_map.py`，重新抓取全家官方資料並產生最新的 `public/stores.json`。
+*   若資料有變更，工作流程會自動 commit 並 push 至 `main` 分支。
+*   此推送會自動觸發 `deploy.yml`，重新建置並部署正式站台，因此資料更新後正式站台會自動同步，無需任何人工介入。
+*   如需立即手動觸發更新，可至 GitHub repository 的 Actions 頁面，選擇「Update Store Data」工作流程並執行 `workflow_dispatch`。
 
 ## 設定與安全性 (Configuration & Security)
 
