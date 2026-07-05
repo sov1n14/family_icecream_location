@@ -1,4 +1,5 @@
-build_up/
+build_up/*
+!build_up/generate_store_map.py
 .venv/
 local.py
 .cursor/

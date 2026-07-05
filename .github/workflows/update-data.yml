@@ -21,6 +21,8 @@ jobs:
           python-version: '3.12'
 
       - name: Run data generator
+        env:
+          MAP_API_KEY: ${{ secrets.MAP_API_KEY }}
         run: python build_up/generate_store_map.py
 
       - name: Commit and push changes

@@ -93,6 +93,12 @@
 *   若資料有變更，工作流程會自動 commit 並 push 至 `main` 分支。
 *   此推送會自動觸發 `deploy.yml`，重新建置並部署正式站台，因此資料更新後正式站台會自動同步，無需任何人工介入。
 *   如需立即手動觸發更新，可至 GitHub repository 的 Actions 頁面，選擇「Update Store Data」工作流程並執行 `workflow_dispatch`。
+*   `generate_store_map.py` 所需的 `MAP_API_KEY` 已改為透過環境變數讀取，正式環境的金鑰值存放於 GitHub repository 的 Actions Secret（`MAP_API_KEY`），不會出現在程式碼或 git 歷史中。
+*   若需在本機手動執行此腳本，請先設定環境變數再執行，例如 PowerShell：
+    ```powershell
+    $env:MAP_API_KEY = "your-api-key"
+    python build_up/generate_store_map.py
+    ```
 
 ## 設定與安全性 (Configuration & Security)
 
